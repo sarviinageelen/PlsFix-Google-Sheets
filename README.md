@@ -18,12 +18,12 @@ Features
 ### Formulas & Data
 
 -   Error Wrap: Wraps the selected formula with the `IFERROR` function to show the error message "NA" instead of an error.
--   Flip Sign (!): Flips the sign of numbers in the selected cells, negates positive numbers, and makes negative numbers positive.
--   Comment Cells (!): Comments the selected cells if they are numbers or formulas. If the cell is already commented, it will uncomment it.
+-   Flip Sign (WIP): Flips the sign of numbers in the selected cells, negates positive numbers, and makes negative numbers positive.
+-   Comment Cells (WIP): Comments the selected cells if they are numbers or formulas. If the cell is already commented, it will uncomment it.
 -   Clean Cells: Cleans up the selected cells by removing all spaces, line breaks, and non-printable characters.
--   Anchor Formula (!): Anchors the formula in the selected cells to their relative position, so that they remain unchanged when inserted or deleted.
--   Paste Exact (!!): Pastes the exact value of the copied cells, ignoring any formulas, formatting, and data validation rules.
--   Paste Insert (!!): Inserts the copied cells as if they were typed directly into the selected cells.
+-   Anchor Formula (WIP): Anchors the formula in the selected cells to their relative position, so that they remain unchanged when inserted or deleted.
+-   Paste Exact (WIP): Pastes the exact value of the copied cells, ignoring any formulas, formatting, and data validation rules.
+-   Paste Insert (WIP): Inserts the copied cells as if they were typed directly into the selected cells.
 -   Flatten Cells: Flattens the multi-dimensional arrays in the selected cells to a single dimension by concatenating the arrays with a comma.
 
 ### Sheets
