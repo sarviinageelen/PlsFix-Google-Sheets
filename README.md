@@ -7,9 +7,9 @@ Installation
 ------------
 
 1.  Open the Google Sheet where you want to use the utilities.
-2.  Click on the `Tools` menu and select `Script editor`.
+2.  Click on the `Extensions` menu and select `Apps Script`.
 3.  Copy and paste the code into the script editor.
-4.  Save the script by clicking on `File` and then `Save`.
+4.  Save the script by clicking on `Save`.
 5.  Refresh the Google Sheet.
 
 Features
