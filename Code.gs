@@ -3,17 +3,17 @@ function onOpen() {
     .createMenu("Formulas & Data")
     .addItem("Error Wrap", "errorWrap")
     .addSeparator()
-    .addItem("Flip Sign (!)", "flipSign")
+    .addItem("Flip Sign (WIP)", "flipSign")
     .addSeparator()
-    .addItem("Comment Cells (!)", "commentCells")
+    .addItem("Comment Cells (WIP)", "commentCells")
     .addSeparator()
     .addItem("Clean Cells", "cleanCells")
     .addSeparator()
-    .addItem("Anchor Formula (!)", "anchorFormulas")
+    .addItem("Anchor Formula (WIP)", "anchorFormulas")
     .addSeparator()
-    .addItem("Paste Exact (!!)", "pasteExact")
+    .addItem("Paste Exact (WIP)", "pasteExact")
     .addSeparator()
-    .addItem("Paste Insert (!!)", "pasteInsert")
+    .addItem("Paste Insert (WIP)", "pasteInsert")
     .addSeparator()
     .addItem("Flatten Cells", "flattenCells")
     .addToUi();
@@ -26,6 +26,14 @@ function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu("Formatting")
     .addItem("AutoColor Selection", "autoColorSelection")
+    .addSeparator()
+    .addItem("Case Cycle (WIP)", "caseCycle")
+    .addToUi();
+
+  SpreadsheetApp.getUi()
+    .createMenu("Financial Modeling")
+    .addItem("Quick CAGR (WIP)", "quickCAGR")
+    .addSeparator()
     .addToUi();
 
 }
@@ -240,13 +248,89 @@ function autoColorSelection() {
       var value = cell.getValue();
       
       if (formula.length > 0) {
-        cell.setFontColor("black");
+        if (formula.indexOf("!") !== -1 && formula.indexOf(":") !== -1) {
+          cell.setFontColor("green");
+        } else {
+          cell.setFontColor("black");
+        }
       } else if (typeof value === "number") {
         cell.setFontColor("blue");
-      } else if (typeof value === "string" && value.startsWith("=HYPERLINK")) {
-        cell.setFontColor("green");
       }
     }
   }
 }
 
+function caseCycle() {
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var selection = sheet.getActiveRange();
+  var values = selection.getValues();
+  
+  for (var i = 0; i < values.length; i++) {
+    for (var j = 0; j < values[i].length; j++) {
+      if (!values[i][j]) continue;
+      
+      var text = values[i][j].toString();
+      switch (true) {
+        case text == text.toUpperCase():
+          values[i][j] = text.toLowerCase();
+          break;
+        case text == text.toLowerCase():
+          values[i][j] = toTitleCase(text);
+          break;
+        case text == toTitleCase(text):
+          values[i][j] = sentenceCase(text);
+          break;
+        case text == sentenceCase(text):
+          values[i][j] = text.toUpperCase();
+          break;
+        default:
+          values[i][j] = text.toLowerCase();
+          break;
+      }
+    }
+  }
+  
+  selection.setValues(values);
+}
+
+function toTitleCase(str) {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  }).join(' ');
+}
+
+function sentenceCase(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+function quickCAGR() {
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var activeCell = sheet.getActiveCell();
+  var startValue = 0;
+  var endValue = 0;
+  var numYears = 0;
+  var cagr = 0;
+  
+  // Check for values above and to the left of the active cell
+  for (var i = activeCell.getRow() - 1; i >= 1; i--) {
+    var valueAbove = sheet.getRange(i, activeCell.getColumn()).getValue();
+    if (valueAbove) {
+      endValue = valueAbove;
+      numYears = activeCell.getRow() - i;
+      break;
+    }
+  }
+  
+  for (var j = activeCell.getColumn() - 1; j >= 1; j--) {
+    var valueLeft = sheet.getRange(activeCell.getRow(), j).getValue();
+    if (valueLeft) {
+      startValue = valueLeft;
+      break;
+    }
+  }
+  
+  if (startValue && endValue && numYears) {
+    cagr = Math.pow(endValue / startValue, 1 / numYears) - 1;
+    activeCell.setFormula('=((ABS(' + endValue + ')/ABS(' + startValue + '))^(1/' + numYears + ')-1)');
+  }
+}
